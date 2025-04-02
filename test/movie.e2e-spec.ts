@@ -35,4 +35,23 @@ describe('Movie E2E Tests should', () => {
     expect(response.body).toBeDefined();
     expect(response.body).toBe('90s');
   });
+
+  it('get the profitability of a movie', async () => {
+    server.use(
+      http.get('/movies/Titanic', () =>
+        HttpResponse.json({
+          name: 'Titanic',
+          releasedOn: '1997-12-19T00:00:00.000Z',
+          budget: 200000000,
+        }),
+      ),
+    );
+
+    const response = await request(app.getHttpServer())
+      .get('/Titanic/profitable')
+      .expect(200);
+
+    expect(response.body).toBeDefined();
+    expect(response.body).toBe('PROFITABLE');
+  });
 });

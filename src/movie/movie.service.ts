@@ -21,6 +21,17 @@ export class MovieService {
     }
   }
 
+  async getProfitability(movieName: string) {
+    const movie: Movie = await this.movieApiService.getMovie(movieName);
+    if (movie.budget >= 500000000) {
+      return 'BLOCKBUSTER';
+    } else if (movie.budget >= 100000000) {
+      return 'PROFITABLE';
+    } else {
+      return 'NONPROFITABLE';
+    }
+  }
+
   private parseYear(releaseDate: string) {
     return parseInt(releaseDate.split('-')[0]);
   }

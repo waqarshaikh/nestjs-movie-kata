@@ -11,4 +11,10 @@ export class MovieController {
   getOldness(@Param('movieName') movieName: string): any {
     return this.movieService.findOldness(movieName);
   }
+
+  @Get('/:movieName/profitable')
+  async getProfitability(@Param('movieName') movieName: string) {
+    const profitability = await this.movieService.getProfitability(movieName);
+    return { revenue: profitability };
+  }
 }
