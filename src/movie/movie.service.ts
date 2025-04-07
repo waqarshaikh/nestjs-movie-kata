@@ -34,6 +34,15 @@ export class MovieService {
     }
   }
 
+  async getRatings(movieName: string) {
+    const movie: Movie = await this.movieApiService.getMovie(movieName);
+    return this.gatRatingOutOfFive(movie.rating);
+  }
+
+  private gatRatingOutOfFive(rating: number): number {
+    return Math.round((rating / 2) * 10) / 10;
+  }
+
   private parseYear(releaseDate: string) {
     return parseInt(releaseDate.split('-')[0]);
   }

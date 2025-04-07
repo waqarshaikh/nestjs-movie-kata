@@ -14,7 +14,9 @@ describe('Movie Service should', () => {
 
   it('return NEW for year >= 2000', async () => {
     movieApiService.getMovie.mockReturnValueOnce(
-      Promise.resolve(new Movie('Titanic', '2000-01-01T00:00:00Z', 200, 180)),
+      Promise.resolve(
+        new Movie('Titanic', '2000-01-01T00:00:00Z', 200, 180, 8),
+      ),
     );
 
     const result = await service.findOldness('Titanic');
@@ -25,7 +27,7 @@ describe('Movie Service should', () => {
 
   it('return 90s for year >= 90', async () => {
     movieApiService.getMovie.mockReturnValueOnce(
-      Promise.resolve(new Movie('Avatar', '1997-01-01T00:00:00Z', 200, 200)),
+      Promise.resolve(new Movie('Avatar', '1997-01-01T00:00:00Z', 200, 200, 8)),
     );
 
     const result = await service.findOldness('Avatar');
@@ -36,9 +38,7 @@ describe('Movie Service should', () => {
 
   it('return OLD for year < 90', async () => {
     movieApiService.getMovie.mockReturnValueOnce(
-      Promise.resolve(
-        new Movie('Island', '1985-01-01T00:00:00Z', 200, 200),
-      ),
+      Promise.resolve(new Movie('Island', '1985-01-01T00:00:00Z', 200, 200, 8)),
     );
 
     const result = await service.findOldness('Island');
@@ -49,9 +49,7 @@ describe('Movie Service should', () => {
 
   it('return PROFITABLE for made >= budget', async () => {
     movieApiService.getMovie.mockReturnValueOnce(
-      Promise.resolve(
-        new Movie('', '1985-01-01T00:00:00Z', 100, 200),
-      ),
+      Promise.resolve(new Movie('', '1985-01-01T00:00:00Z', 100, 200, 8)),
     );
 
     const result = await service.getProfitability('Titanic');
@@ -62,7 +60,7 @@ describe('Movie Service should', () => {
 
   it('return NOT PROFITABLE for made < budget', async () => {
     movieApiService.getMovie.mockReturnValueOnce(
-      Promise.resolve(new Movie('Island', '1985-01-01T00:00:00Z', 100, 90)),
+      Promise.resolve(new Movie('Island', '1985-01-01T00:00:00Z', 100, 90, 8)),
     );
 
     const result = await service.getProfitability('Island');
@@ -73,12 +71,45 @@ describe('Movie Service should', () => {
 
   it('return BLOCKBUSTER for budget >= made', async () => {
     movieApiService.getMovie.mockReturnValueOnce(
-      Promise.resolve(new Movie('Titanic', '1985-01-01T00:00:00Z', 80, 190)),
+      Promise.resolve(new Movie('Titanic', '1985-01-01T00:00:00Z', 80, 190, 8)),
     );
 
     const result = await service.getProfitability('Titanic');
 
     expect(result).toBeDefined();
     expect(result).toBe('BLOCKBUSTER');
+  });
+
+  it('return rating 4 for movie rating 8', async () => {
+    movieApiService.getMovie.mockReturnValueOnce(
+      Promise.resolve(new Movie('Titanic', '1985-01-01T00:00:00Z', 80, 190, 8)),
+    );
+
+    const result = await service.getRatings('Titanic');
+
+    expect(result).toBeDefined();
+    expect(result).toBe(4);
+  });
+
+  it('return rating 3 for movie rating 6', async () => {
+    movieApiService.getMovie.mockReturnValueOnce(
+      Promise.resolve(new Movie('Titanic', '1985-01-01T00:00:00Z', 80, 190, 6)),
+    );
+
+    const result = await service.getRatings('Titanic');
+
+    expect(result).toBeDefined();
+    expect(result).toBe(3);
+  });
+
+  it('return rating 2 for movie rating 4', async () => {
+    movieApiService.getMovie.mockReturnValueOnce(
+      Promise.resolve(new Movie('Titanic', '1985-01-01T00:00:00Z', 80, 190, 4)),
+    );
+
+    const result = await service.getRatings('Titanic');
+
+    expect(result).toBeDefined();
+    expect(result).toBe(2);
   });
 });
