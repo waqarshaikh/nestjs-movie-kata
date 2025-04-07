@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { MovieApiService } from './movie-api.service';
 import { Movie } from './movie';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class MovieService {
-  constructor(private readonly movieApiService: MovieApiService) {
+  constructor(private movieApiService: MovieApiService) {
     console.log('MovieService constructor called');
   }
 
@@ -23,9 +23,11 @@ export class MovieService {
 
   async getProfitability(movieName: string) {
     const movie: Movie = await this.movieApiService.getMovie(movieName);
-    if (movie.budget >= 500000000) {
+    const profit = movie.made - movie.budget;
+
+    if (profit > 100) {
       return 'BLOCKBUSTER';
-    } else if (movie.budget >= 100000000) {
+    } else if (profit >= 0) {
       return 'PROFITABLE';
     } else {
       return 'NONPROFITABLE';

@@ -3,5 +3,6 @@ export class Movie {
     public name: string,
     public date: string,
     public budget: number,
+    public made: number,
   ) {}
 }

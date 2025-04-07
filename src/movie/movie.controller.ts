@@ -1,9 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Scope } from '@nestjs/common';
 import { MovieService } from './movie.service';
 
-@Controller()
+@Controller({ scope: Scope.REQUEST })
 export class MovieController {
-  constructor(private readonly movieService: MovieService) {
+  constructor(private movieService: MovieService) {
     console.log('MovieController constructor called');
   }
 
